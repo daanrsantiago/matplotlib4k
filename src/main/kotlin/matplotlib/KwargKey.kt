@@ -1,0 +1,4 @@
+package matplotlib
+
+interface KwargKey {
+}
