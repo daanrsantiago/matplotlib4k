@@ -47,7 +47,7 @@ interface Axes3D : Axes {
             "$variableName.set_zlabel(" +
                     "zlabel=${zlabel.toPythonStringQuotedOrEmpty()}," +
                     "labelpad=${labelpad.toPythonStringOrNone()}," +
-                    "${kwargs.toKwargPythonStringOrEmpty()}" +
+                    kwargs.toKwargPythonStringOrEmpty() +
                     ")"
         )
     }
@@ -62,12 +62,18 @@ interface Axes3D : Axes {
         length: Double = 1.0,
         arrow_length_ratio: Double = 0.3,
         pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
-        normalize: Boolean = false
+        normalize: Boolean = false,
+        kwargs: Map<KwargKey, KwargValue>?
     ) {
         PythonScriptBuilder.addCommand(
             "$variableName.quiver(${xValues.variableName}, ${yValues.variableName}, ${zValues.variableName}," +
-                    "${uValues.variableName}, ${vValues.variableName}, ${wValues.variableName}, length=$length," +
-                    " arrow_length_ratio=$arrow_length_ratio, pivot=${pivot.toPythonStringQuotedOrEmpty()},normalize=${normalize.toPythonBooleanOrNone()})"
+                    "${uValues.variableName}, ${vValues.variableName}, ${wValues.variableName}," +
+                    "length=$length," +
+                    "arrow_length_ratio=$arrow_length_ratio," +
+                    "pivot=${pivot.toPythonStringQuotedOrEmpty()}," +
+                    "normalize=${normalize.toPythonBooleanOrNone()}${kwargs.emptyIfNullOrComma()}" +
+                    kwargs.toKwargPythonStringOrEmpty() +
+                    ")"
         )
     }
 
@@ -81,12 +87,18 @@ interface Axes3D : Axes {
         length: Double = 1.0,
         arrow_length_ratio: Double = 0.3,
         pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
-        normalize: Boolean = false
+        normalize: Boolean = false,
+        kwargs: Map<KwargKey, KwargValue>?
     ) {
         PythonScriptBuilder.addCommand(
             "$variableName.quiver(${xValues.toPythonNumberArrayStringOrEmpty()}, ${yValues.toPythonNumberArrayStringOrEmpty()}, ${zValues.toPythonNumberArrayStringOrEmpty()}," +
-                    "${uValues.toPythonNumberArrayStringOrEmpty()}, ${vValues.toPythonNumberArrayStringOrEmpty()}, ${wValues.toPythonNumberArrayStringOrEmpty()}, length=$length," +
-                    " arrow_length_ratio=$arrow_length_ratio, pivot=${pivot.toPythonStringQuotedOrEmpty()},normalize=${normalize.toPythonBooleanOrNone()})"
+                    "${uValues.toPythonNumberArrayStringOrEmpty()}, ${vValues.toPythonNumberArrayStringOrEmpty()}, ${wValues.toPythonNumberArrayStringOrEmpty()}," +
+                    "length=$length," +
+                    "arrow_length_ratio=$arrow_length_ratio," +
+                    "pivot=${pivot.toPythonStringQuotedOrEmpty()}," +
+                    "normalize=${normalize.toPythonBooleanOrNone()}${kwargs.emptyIfNullOrComma()}" +
+                    kwargs.toKwargPythonStringOrEmpty() +
+                    ")"
         )
     }
 
