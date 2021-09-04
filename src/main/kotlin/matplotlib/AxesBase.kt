@@ -6,8 +6,6 @@ import python.PythonVariable
 
 interface AxesBase: PythonVariable {
 
-    override val variableName: String
-
     fun set_xlabel(
         xlabel: String,
         labelpad: Double = 4.0,

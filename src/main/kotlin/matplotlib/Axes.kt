@@ -16,7 +16,7 @@ interface Axes : AxesBase {
     override val variableName: String
 
     companion object {
-        var axesNumber: Int = 0
+        internal var axesNumber: Int = 0
             get() {
                 field++
                 return field

@@ -7,10 +7,9 @@ import org.ejml.simple.SimpleMatrix
 import python.toPythonVariableNameOrNone
 
 interface Axes3D : Axes {
-    override val variableName: String
 
     companion object {
-        var axes3DNumber: Int = 0
+        internal var axes3DNumber: Int = 0
             get() {
                 field++
                 return field

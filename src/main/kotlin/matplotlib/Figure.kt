@@ -9,10 +9,8 @@ import python.PythonVariable
 
 interface Figure: PythonVariable {
 
-    override val variableName: String
-
     companion object {
-        var figureNumber: Int = 0
+        internal var figureNumber: Int = 0
             get() {
                 return field++
             }

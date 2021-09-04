@@ -4,10 +4,8 @@ import python.PythonVariable
 
 interface Colormap: PythonVariable {
 
-    override val variableName: String
-
     companion object {
-        var colormapNumber = 0
+        internal var colormapNumber = 0
             get() {
                 field++
                 return field
