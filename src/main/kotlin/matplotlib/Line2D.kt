@@ -5,7 +5,7 @@ import python.PythonVariable
 interface Line2D: Artist {
 
     companion object {
-        var line2DNumber: Int = 0
+        internal var line2DNumber: Int = 0
             get() {
                 field++
                 return field

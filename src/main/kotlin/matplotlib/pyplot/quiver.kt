@@ -4,6 +4,8 @@ import extensions.toPythonNumberArrayStringOrEmpty
 import extensions.toPythonStringOrNone
 import extensions.toPythonStringQuotedOrNone
 import matplotlib.Axes
+import matplotlib.Quiver
+import matplotlib.Quiver.Companion.quiverNumber
 import matplotlib.np.NPVar
 import matplotlib.toPythonTupleString
 import python.PythonScriptBuilder
@@ -26,27 +28,32 @@ fun quiver(
     minlength: Double? = null,
     pivot: Axes.QuiverPivotOptions? = null,
     color: Color? = null
-) {
-    PythonScriptBuilder.addCommand(
-        "plt.quiver(" +
-                "${xValues.variableName}," +
-                "${yValues.variableName}," +
-                "${uValues.variableName}," +
-                "${vValues.variableName}," +
-                "units=${units.toPythonStringQuotedOrNone()}," +
-                "angles=${angles.toPythonStringQuotedOrNone()}," +
-                "scale=${scale.toPythonStringOrNone()}," +
-                "scale_units=${scale_units.toPythonStringQuotedOrNone()}," +
-                "width=${width.toPythonStringOrNone()}," +
-                "headwidth=${headwidth.toPythonStringOrNone()}," +
-                "headlength=${headlength.toPythonStringOrNone()}," +
-                "headaxislegth=${headaxislegth.toPythonStringOrNone()}," +
-                "minshaft=${minshaft.toPythonStringOrNone()}," +
-                "minlength=${minlength.toPythonStringOrNone()}," +
-                "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                "color=${color.toPythonTupleString()}" +
-                ")"
-    )
+): Quiver {
+    return object : Quiver {
+        override val variableName: String = "quiver_$quiverNumber"
+        init {
+            PythonScriptBuilder.addCommand(
+                "${this.variableName} = plt.quiver(" +
+                        "${xValues.variableName}," +
+                        "${yValues.variableName}," +
+                        "${uValues.variableName}," +
+                        "${vValues.variableName}," +
+                        "units=${units.toPythonStringQuotedOrNone()}," +
+                        "angles=${angles.toPythonStringQuotedOrNone()}," +
+                        "scale=${scale.toPythonStringOrNone()}," +
+                        "scale_units=${scale_units.toPythonStringQuotedOrNone()}," +
+                        "width=${width.toPythonStringOrNone()}," +
+                        "headwidth=${headwidth.toPythonStringOrNone()}," +
+                        "headlength=${headlength.toPythonStringOrNone()}," +
+                        "headaxislegth=${headaxislegth.toPythonStringOrNone()}," +
+                        "minshaft=${minshaft.toPythonStringOrNone()}," +
+                        "minlength=${minlength.toPythonStringOrNone()}," +
+                        "pivot=${pivot.toPythonStringQuotedOrNone()}," +
+                        "color=${color.toPythonTupleString()}" +
+                        ")"
+            )
+        }
+    }
 }
 
 fun quiver(
@@ -66,25 +73,30 @@ fun quiver(
     minlength: Double = 1.0,
     pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
     color: Color = Color.BLACK
-) {
-    PythonScriptBuilder.addCommand(
-        "plt.quiver(" +
-                "${xValues.toPythonNumberArrayStringOrEmpty()}," +
-                "${yValues.toPythonNumberArrayStringOrEmpty()}," +
-                "${uValues.toPythonNumberArrayStringOrEmpty()}," +
-                "${vValues.toPythonNumberArrayStringOrEmpty()}," +
-                "units=${units.toPythonStringQuotedOrNone()}," +
-                "angles=${angles.toPythonStringQuotedOrNone()}," +
-                "scale=${scale.toPythonStringOrNone()}," +
-                "scale_units=${scale_units.toPythonStringQuotedOrNone()}," +
-                "width=${width.toPythonStringOrNone()}," +
-                "headwidth=${headwidth.toPythonStringOrNone()}," +
-                "headlength=${headlength.toPythonStringOrNone()}," +
-                "headaxislength=${headaxislength.toPythonStringOrNone()}," +
-                "minshaft=${minshaft.toPythonStringOrNone()}," +
-                "minlength=${minlength.toPythonStringOrNone()}," +
-                "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                "color=${color.toPythonTupleString()}" +
-                ")"
-    )
+): Quiver {
+    return object : Quiver {
+        override val variableName: String = "quiver_$quiverNumber"
+        init {
+            PythonScriptBuilder.addCommand(
+                "${this.variableName} = plt.quiver(" +
+                        "${xValues.toPythonNumberArrayStringOrEmpty()}," +
+                        "${yValues.toPythonNumberArrayStringOrEmpty()}," +
+                        "${uValues.toPythonNumberArrayStringOrEmpty()}," +
+                        "${vValues.toPythonNumberArrayStringOrEmpty()}," +
+                        "units=${units.toPythonStringQuotedOrNone()}," +
+                        "angles=${angles.toPythonStringQuotedOrNone()}," +
+                        "scale=${scale.toPythonStringOrNone()}," +
+                        "scale_units=${scale_units.toPythonStringQuotedOrNone()}," +
+                        "width=${width.toPythonStringOrNone()}," +
+                        "headwidth=${headwidth.toPythonStringOrNone()}," +
+                        "headlength=${headlength.toPythonStringOrNone()}," +
+                        "headaxislength=${headaxislength.toPythonStringOrNone()}," +
+                        "minshaft=${minshaft.toPythonStringOrNone()}," +
+                        "minlength=${minlength.toPythonStringOrNone()}," +
+                        "pivot=${pivot.toPythonStringQuotedOrNone()}," +
+                        "color=${color.toPythonTupleString()}" +
+                        ")"
+            )
+        }
+    }
 }
