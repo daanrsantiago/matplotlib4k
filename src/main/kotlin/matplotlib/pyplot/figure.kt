@@ -18,10 +18,10 @@ fun figure(
     clear: Boolean = false,
 ): Figure {
     return object: Figure {
-        override val figureName: String = "figure_${Figure.figureNumber}"
+        override val variableName: String = "figure_${Figure.figureNumber}"
         init {
 
-            PythonScriptBuilder.addCommand("""$figureName = plt.figure(
+            PythonScriptBuilder.addCommand("""$variableName = plt.figure(
                 |num=${num.toPythonStringOrNone()},
                 |figsize=${figsize.toPythonTupleString()},
                 |dpi=${dpi.toPythonStringOrNone()},

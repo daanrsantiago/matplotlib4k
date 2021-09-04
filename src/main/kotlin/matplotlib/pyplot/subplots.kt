@@ -19,14 +19,14 @@ fun subplots(
 ): Pair<Figure, Axes> {
     val figAxes = Pair(
         object : Figure {
-            override val figureName: String = "figure_$figureNumber"
+            override val variableName: String = "figure_$figureNumber"
         },
         object : Axes {
-            override val axesName: String = "axes_$axesNumber"
+            override val variableName: String = "axes_$axesNumber"
         }
     )
     PythonScriptBuilder.addCommand(
-        "${figAxes.first.figureName}, ${figAxes.second.axesName} = plt.subplots(" +
+        "${figAxes.first.variableName}, ${figAxes.second.variableName} = plt.subplots(" +
                 "nrows=$nrows," +
                 "ncols=$ncols," +
                 "sharex=${sharex.toPythonBooleanOrNone()}," +
