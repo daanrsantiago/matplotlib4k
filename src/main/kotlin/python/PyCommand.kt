@@ -7,6 +7,7 @@ import java.io.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Paths
 import java.util.regex.Pattern
+import kotlin.concurrent.thread
 
 class PyCommand(private val pythonConfig: PythonConfig) {
 
@@ -36,43 +37,39 @@ class PyCommand(private val pythonConfig: PythonConfig) {
     }
 
     /**
-     * Execute the Pyhon script and print its outputs and errors
+     * Execute the Python script and print its outputs and errors
      */
     @Throws(IOException::class, PythonExecutionException::class)
     private fun command(commands: List<String>) {
         val processBuilder = ProcessBuilder(commands)
         val process = processBuilder.start()
 
-        // stdout
-        var bufferedReader = BufferedReader(InputStreamReader(process.inputStream))
-        var line = bufferedReader.readLine()
-        while (line != null) {
-            println(line)
-            line = bufferedReader.readLine()
-        }
-
-        // stderr
-        // TODO: have a common way with stdout
-        bufferedReader = BufferedReader(InputStreamReader(process.errorStream))
-        val stringBuilder = StringBuilder()
-        line = bufferedReader.readLine()
-        var hasError = false
-
-        while (line != null) {
-            stringBuilder.append(line).append('\n')
-            val matcher = ERROR_PAT.matcher(line)
-            if (matcher.find()) {
-                hasError = true
+        thread (start = true) {
+            // stdout
+            var bufferedReader = BufferedReader(InputStreamReader(process.inputStream))
+            bufferedReader.forEachLine { line ->
+                println(line)
             }
-            line = bufferedReader.readLine()
-        }
 
-        val msg = stringBuilder.toString()
-        if (hasError) {
-            LOGGER.error(msg)
-            throw PythonExecutionException("Python execution error: $msg")
-        } else {
-            LOGGER.warn(msg)
+            // stderr
+            bufferedReader = BufferedReader(InputStreamReader(process.errorStream))
+            val stringBuilder = StringBuilder()
+            var hasError = false
+            bufferedReader.forEachLine { line ->
+                stringBuilder.append(line).append('\n')
+                val matcher = ERROR_PAT.matcher(line)
+                if (matcher.find()) {
+                    hasError = true
+                }
+
+                val msg = stringBuilder.toString()
+                if (hasError) {
+                    LOGGER.error(msg)
+                    throw PythonExecutionException("Python execution error: $msg")
+                } else {
+                    LOGGER.warn(msg)
+                }
+            }
         }
     }
 
@@ -93,8 +90,11 @@ class PyCommand(private val pythonConfig: PythonConfig) {
         val scriptFile = File(tmpDir, "exec.py")
         writePythonScriptToFile(pythonScript, scriptFile)
         val scriptPath = Paths.get(scriptFile.toURI()).toAbsolutePath().toString()
-        command(buildCommandArgs(scriptPath))
-        tmpDir.delete()
+        try {
+            command(buildCommandArgs(scriptPath))
+        } finally {
+            tmpDir.delete()
+        }
     }
 
     companion object {
