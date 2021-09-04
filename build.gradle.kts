@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.daniel-tucano"
-version = "0.1.6"
+version = "0.2.1"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
