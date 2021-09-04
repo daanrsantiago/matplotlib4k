@@ -62,7 +62,7 @@ interface Axes3D : Axes {
         arrow_length_ratio: Double = 0.3,
         pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
         normalize: Boolean = false,
-        kwargs: Map<KwargKey, KwargValue>?
+        kwargs: Map<KwargKey, KwargValue>? = null
     ) {
         PythonScriptBuilder.addCommand(
             "$variableName.quiver(${xValues.variableName}, ${yValues.variableName}, ${zValues.variableName}," +
@@ -87,7 +87,7 @@ interface Axes3D : Axes {
         arrow_length_ratio: Double = 0.3,
         pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
         normalize: Boolean = false,
-        kwargs: Map<KwargKey, KwargValue>?
+        kwargs: Map<KwargKey, KwargValue>? = null
     ) {
         PythonScriptBuilder.addCommand(
             "$variableName.quiver(${xValues.toPythonNumberArrayStringOrEmpty()}, ${yValues.toPythonNumberArrayStringOrEmpty()}, ${zValues.toPythonNumberArrayStringOrEmpty()}," +
