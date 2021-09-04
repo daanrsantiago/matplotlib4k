@@ -3,9 +3,11 @@ package matplotlib
 import extensions.*
 import matplotlib.np.NPVar
 import python.PythonScriptBuilder
+import org.ejml.simple.SimpleMatrix
+import python.toPythonVariableNameOrNone
 
-interface Axes3D {
-    val axes3DName: String
+interface Axes3D : Axes {
+    override val variableName: String
 
     companion object {
         var axes3DNumber: Int = 0
@@ -16,20 +18,78 @@ interface Axes3D {
             private set
     }
 
+    fun set_zlim3d(
+        bottom: Double? = null,
+        top: Double? = null,
+        emit: Boolean = true,
+        auto: Boolean = false,
+        zmin: Double? = null,
+        zmax: Double? = null
+    ) {
+        PythonScriptBuilder.addCommand(
+            "$variableName.set_zlim3d(" +
+                    "bottom=${bottom.toPythonStringOrNone()}," +
+                    "top=${top.toPythonStringOrNone()}," +
+                    "emit=${emit.toPythonBooleanOrNone()}," +
+                    "auto=${auto.toPythonBooleanOrNone()}," +
+                    "zmin=${zmin.toPythonStringOrNone()}," +
+                    "zmax=${zmax.toPythonStringOrNone()}," +
+                    ")"
+        )
+    }
+
+    fun set_zlabel(
+        zlabel: String,
+        labelpad: Double = 4.0,
+        kwargs: Map<Text.TextKwargsKeys, KwargValue>? = null
+    ) {
+        PythonScriptBuilder.addCommand(
+            "$variableName.set_zlabel(" +
+                    "zlabel=${zlabel.toPythonStringQuotedOrEmpty()}," +
+                    "labelpad=${labelpad.toPythonStringOrNone()}," +
+                    "${kwargs.toKwargPythonStringOrEmpty()}" +
+                    ")"
+        )
+    }
+
     fun quiver(
-        xValues: NPVar, yValues: NPVar, zValues: NPVar,
-        uValues: NPVar, vValues: NPVar, wValues: NPVar,
-        length: Double = 1.0, arrow_length_ratio: Double = 0.3, pivot: QuiverPivot = QuiverPivot.tail,
+        xValues: NPVar,
+        yValues: NPVar,
+        zValues: NPVar,
+        uValues: NPVar,
+        vValues: NPVar,
+        wValues: NPVar,
+        length: Double = 1.0,
+        arrow_length_ratio: Double = 0.3,
+        pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
         normalize: Boolean = false
     ) {
         PythonScriptBuilder.addCommand(
-            "$axes3DName.quiver(${xValues.npVarName}, ${yValues.npVarName}, ${zValues.npVarName}," +
-                    "${uValues.npVarName}, ${vValues.npVarName}, ${wValues.npVarName}, length=$length," +
+            "$variableName.quiver(${xValues.variableName}, ${yValues.variableName}, ${zValues.variableName}," +
+                    "${uValues.variableName}, ${vValues.variableName}, ${wValues.variableName}, length=$length," +
                     " arrow_length_ratio=$arrow_length_ratio, pivot=${pivot.toPythonStringQuotedOrEmpty()},normalize=${normalize.toPythonBooleanOrNone()})"
         )
     }
 
-    enum class QuiverPivot { tail, middle, tip }
+    fun quiver(
+        xValues: List<Double>,
+        yValues: List<Double>,
+        zValues: List<Double>,
+        uValues: List<Double>,
+        vValues: List<Double>,
+        wValues: List<Double>,
+        length: Double = 1.0,
+        arrow_length_ratio: Double = 0.3,
+        pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
+        normalize: Boolean = false
+    ) {
+        PythonScriptBuilder.addCommand(
+            "$variableName.quiver(${xValues.toPythonNumberArrayStringOrEmpty()}, ${yValues.toPythonNumberArrayStringOrEmpty()}, ${zValues.toPythonNumberArrayStringOrEmpty()}," +
+                    "${uValues.toPythonNumberArrayStringOrEmpty()}, ${vValues.toPythonNumberArrayStringOrEmpty()}, ${wValues.toPythonNumberArrayStringOrEmpty()}, length=$length," +
+                    " arrow_length_ratio=$arrow_length_ratio, pivot=${pivot.toPythonStringQuotedOrEmpty()},normalize=${normalize.toPythonBooleanOrNone()})"
+        )
+    }
+
 
     fun plot(
         xs: List<Double>,
@@ -39,11 +99,12 @@ interface Axes3D {
         kwargs: Map<Line2D.Line2DArgs, KwargValue>? = null
     ) {
         PythonScriptBuilder.addCommand(
-            "$axes3DName.plot(${xs.toPythonNumberArrayString()}," +
-                    "${ys.toPythonNumberArrayString()}," +
-                    "${zs.toPythonNumberArrayString()}," +
+            "$variableName.plot(${xs.toPythonNumberArrayStringOrEmpty()}," +
+                    "${ys.toPythonNumberArrayStringOrEmpty()}," +
+                    "${zs.toPythonNumberArrayStringOrEmpty()}," +
                     "zdir=${zDir.toPythonStringQuotedOrEmpty()}${kwargs.emptyIfNullOrComma()}" +
-                    "${kwargs.toKwargPythonStringOrEmpty()})"
+                    kwargs.toKwargPythonStringOrEmpty() +
+                    ")"
         )
     }
 
@@ -60,15 +121,15 @@ interface Axes3D {
         kwargs: Map<Scatter3DKwargsKeys, KwargValue>? = null
     ) {
         PythonScriptBuilder.addCommand(
-            "$axes3DName.scatter(" +
-                    "${xs.toPythonNumberArrayString()}," +
-                    "${ys.toPythonNumberArrayString()}," +
-                    "${zs.toPythonNumberArrayString()}," +
+            "$variableName.scatter(" +
+                    "${xs.toPythonNumberArrayStringOrEmpty()}," +
+                    "${ys.toPythonNumberArrayStringOrEmpty()}," +
+                    "${zs.toPythonNumberArrayStringOrEmpty()}," +
                     "zdir=${zDir.toPythonStringQuotedOrNone()}," +
                     "s=${s.toPythonStringOrNone()}," +
                     "c=${c.toPythonStringOrNone()}," +
                     "depthshade=${depthshade.toPythonBooleanOrNone()}${kwargs.emptyIfNullOrComma()}" +
-                    "${kwargs.toKwargPythonStringOrEmpty()}" +
+                    kwargs.toKwargPythonStringOrEmpty() +
                     ")"
         )
     }
@@ -76,4 +137,27 @@ interface Axes3D {
     enum class Scatter3DZDirOptions { x, y, z, `-x`, `-y`, `-z` }
     enum class Scatter3DKwargsKeys :
         KwargKey { marker, cmap, norm, vmin, vmax, alpha, linewidths, edgecolors, plotnonfinite }
+
+
+    fun plot_surface(X: SimpleMatrix, Y: SimpleMatrix, Z: SimpleMatrix, cmap: Colormap? = null) {
+        PythonScriptBuilder.addCommand(
+            "$variableName.plot_surface(" +
+                    "X=${X.toPythonMatrixStringOrNone()}," +
+                    "Y=${Y.toPythonMatrixStringOrNone()}," +
+                    "Z=${Z.toPythonMatrixStringOrNone()}${cmap.emptyIfNullOrComma()}" +
+                    "cmap=${cmap.toPythonVariableNameOrNone()}" +
+                    ")"
+        )
+    }
+
+    fun plot_surface(X: NPVar, Y: NPVar, Z: NPVar, cmap: Colormap? = null) {
+        PythonScriptBuilder.addCommand(
+            "$variableName.plot_surface(" +
+                    "X=${X.variableName}," +
+                    "Y=${Y.variableName}," +
+                    "Z=${Z.variableName}${cmap.emptyIfNullOrComma()}" +
+                    "cmap=${cmap.toPythonVariableNameOrNone()}" +
+                    ")"
+        )
+    }
 }
