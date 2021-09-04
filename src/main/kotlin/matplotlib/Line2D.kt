@@ -2,9 +2,7 @@ package matplotlib
 
 import python.PythonVariable
 
-interface Line2D: PythonVariable {
-
-    override val variableName: String
+interface Line2D: Artist {
 
     companion object {
         var line2DNumber: Int = 0
