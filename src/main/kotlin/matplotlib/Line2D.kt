@@ -1,8 +1,10 @@
 package matplotlib
 
-interface Line2D {
+import python.PythonVariable
 
-    val line2DName: String
+interface Line2D: PythonVariable {
+
+    override val variableName: String
 
     companion object {
         var line2DNumber: Int = 0
