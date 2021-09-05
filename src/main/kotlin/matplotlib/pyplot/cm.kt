@@ -3,6 +3,7 @@ package matplotlib.pyplot
 import matplotlib.Colormap
 import matplotlib.Colormap.Companion.colormapNumber
 import python.PythonScriptBuilder
+import python.PythonVariable
 
 enum class ColorMaps : Colormap {
     Blues, BrBG, BuGn, BuPu, CMRmap, GnBu, Greens, Greys, OrRd, Oranges, PRGn, PiYG,
@@ -12,9 +13,6 @@ enum class ColorMaps : Colormap {
     gist_stern, gist_yarg, gnuplot, gnuplot2, gray, hot, hsv, jet, nipy_spectral, ocean, pink,
     prism, rainbow, seismic, spring, summer, terrain, winter;
 
-    override val variableName: String = "cm_$colormapNumber"
+    override val variableName: String = "plt.cm.${this@ColorMaps.name}"
 
-    init {
-        PythonScriptBuilder.addCommand("$variableName = plt.cm.${this@ColorMaps.name}")
-    }
 }
