@@ -3,6 +3,7 @@ package matplotlib
 import extensions.toPythonBooleanOrNone
 import extensions.toPythonStringQuotedOrEmpty
 import extensions.toPythonStringQuotedOrNone
+import matplotlib.Axes.Companion.axesNumber
 import matplotlib.Axes3D.Companion.axes3DNumber
 import python.PythonScriptBuilder
 import python.PythonVariable
@@ -24,16 +25,31 @@ interface Figure: PythonVariable {
 
     // TODO add_subplot(projection='3d') -> Should return Axis3D
 
-    fun add_subplot(projection: AddSubplotProjectionOptions? = null): Axes3D {
-        return object : Axes3D {
-            override val variableName: String = "axes3d_$axes3DNumber"
+    fun add_subplot(projection: AddSubplotProjectionOptions? = null): AxesBase {
+        return when(projection) {
+            AddSubplotProjectionOptions.`3d` -> {
+                object : Axes3D {
+                    override val variableName: String = "axes3d_$axes3DNumber"
 
-            init {
-                PythonScriptBuilder.addCommand(
-                    "$variableName = ${this@Figure.variableName}.add_subplot(" +
-                            "projection=${projection.toPythonStringQuotedOrNone()}" +
-                            ")"
-                )
+                    init {
+                        PythonScriptBuilder.addCommand(
+                            "$variableName = ${this@Figure.variableName}.add_subplot(" +
+                                    "projection=${projection.toPythonStringQuotedOrNone()}" +
+                                    ")"
+                        )
+                    }
+                }
+            }
+            else -> object : Axes {
+                override val variableName: String = "axes_$axesNumber"
+
+                init {
+                    PythonScriptBuilder.addCommand(
+                        "$variableName = ${this@Figure.variableName}.add_subplot(" +
+                                "projection='rectilinear'" +
+                                ")"
+                    )
+                }
             }
         }
     }
