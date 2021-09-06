@@ -83,7 +83,7 @@ interface Axes : AxesBase {
                     "vmax=${vmax.toPythonStringOrNone()}," +
                     "alpha=${alpha.toPythonStringOrNone()}," +
                     "linewidths=${linewidths.toPythonStringOrNone()}," +
-                    "edgecolors=${edgecolors.toPythonTupleString()}," +
+                    "edgecolors=${edgecolors.toPythonTupleStringOrNone()}," +
                     "plotnonfinite=${plotnonfinite.toPythonBooleanOrNone()}" +
                     ")"
         )
@@ -105,7 +105,8 @@ interface Axes : AxesBase {
         minshaft: Double = 1.0,
         minlength: Double = 1.0,
         pivot: QuiverPivotOptions = QuiverPivotOptions.tail,
-        color: Color = Color.BLACK
+        colors: List<Color> = listOf(Color.BLACK),
+        zorder: Double = 3.0
     ): Quiver {
         return object : Quiver {
             override val variableName: String = "quiver_$quiverNumber"
@@ -128,7 +129,8 @@ interface Axes : AxesBase {
                             "minshaft=${minshaft.toPythonStringOrNone()}," +
                             "minlength=${minlength.toPythonStringOrNone()}," +
                             "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                            "color=${color.toPythonTupleString()}" +
+                            "colors=${colors.toPythonColorTupleArrayOrNone()}," +
+                            "zorder=${zorder.toPythonStringOrNone()}" +
                             ")"
                 )
             }
@@ -151,7 +153,8 @@ interface Axes : AxesBase {
         minshaft: Double = 1.0,
         minlength: Double = 1.0,
         pivot: QuiverPivotOptions = QuiverPivotOptions.tail,
-        color: Color = Color.BLACK
+        colors: List<Color> = listOf(Color.BLACK),
+        zorder: Double = 3.0
     ): Quiver {
         return object : Quiver {
             override val variableName: String = "quiver_$quiverNumber"
@@ -173,7 +176,8 @@ interface Axes : AxesBase {
                             "minshaft=${minshaft.toPythonStringOrNone()}," +
                             "minlength=${minlength.toPythonStringOrNone()}," +
                             "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                            "color=${color.toPythonTupleString()}" +
+                            "colors=${colors.toPythonColorTupleArrayOrNone()}," +
+                            "zorder=${zorder.toPythonStringOrNone()}" +
                             ")"
                 )
             }

@@ -5,6 +5,7 @@ import matplotlib.np.NPVar
 import python.PythonScriptBuilder
 import org.ejml.simple.SimpleMatrix
 import python.toPythonVariableNameOrNone
+import java.awt.Color
 
 interface Axes3D : Axes {
 
@@ -87,6 +88,7 @@ interface Axes3D : Axes {
         arrow_length_ratio: Double = 0.3,
         pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
         normalize: Boolean = false,
+        colors: List<Color> = listOf(Color.BLUE),
         kwargs: Map<KwargKey, KwargValue>? = null
     ) {
         PythonScriptBuilder.addCommand(
@@ -95,7 +97,8 @@ interface Axes3D : Axes {
                     "length=$length," +
                     "arrow_length_ratio=$arrow_length_ratio," +
                     "pivot=${pivot.toPythonStringQuotedOrEmpty()}," +
-                    "normalize=${normalize.toPythonBooleanOrNone()}${kwargs.emptyIfNullOrComma()}" +
+                    "normalize=${normalize.toPythonBooleanOrNone()}," +
+                    "colors=${colors.toPythonColorTupleArrayOrNone()}${kwargs.emptyIfNullOrComma()}" +
                     kwargs.toKwargPythonStringOrEmpty() +
                     ")"
         )

@@ -7,7 +7,7 @@ import matplotlib.Axes
 import matplotlib.Quiver
 import matplotlib.Quiver.Companion.quiverNumber
 import matplotlib.np.NPVar
-import matplotlib.toPythonTupleString
+import matplotlib.toPythonColorTupleArrayOrNone
 import python.PythonScriptBuilder
 import java.awt.Color
 
@@ -27,7 +27,8 @@ fun quiver(
     minshaft: Double? = null,
     minlength: Double? = null,
     pivot: Axes.QuiverPivotOptions? = null,
-    color: Color? = null
+    colors: List<Color> = listOf(Color.BLACK),
+    zorder: Double = 3.0
 ): Quiver {
     return object : Quiver {
         override val variableName: String = "quiver_$quiverNumber"
@@ -49,7 +50,8 @@ fun quiver(
                         "minshaft=${minshaft.toPythonStringOrNone()}," +
                         "minlength=${minlength.toPythonStringOrNone()}," +
                         "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                        "color=${color.toPythonTupleString()}" +
+                        "colors=${colors.toPythonColorTupleArrayOrNone()}," +
+                        "zorder=${zorder.toPythonStringOrNone()}" +
                         ")"
             )
         }
@@ -72,7 +74,8 @@ fun quiver(
     minshaft: Double = 1.0,
     minlength: Double = 1.0,
     pivot: Axes.QuiverPivotOptions = Axes.QuiverPivotOptions.tail,
-    color: Color = Color.BLACK
+    color: List<Color> = listOf(Color.BLACK),
+    zorder: Double = 3.0
 ): Quiver {
     return object : Quiver {
         override val variableName: String = "quiver_$quiverNumber"
@@ -94,7 +97,8 @@ fun quiver(
                         "minshaft=${minshaft.toPythonStringOrNone()}," +
                         "minlength=${minlength.toPythonStringOrNone()}," +
                         "pivot=${pivot.toPythonStringQuotedOrNone()}," +
-                        "color=${color.toPythonTupleString()}" +
+                        "color=${color.toPythonColorTupleArrayOrNone()}," +
+                        "zorder=${zorder.toPythonStringOrNone()}" +
                         ")"
             )
         }

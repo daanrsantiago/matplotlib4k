@@ -4,7 +4,7 @@ import extensions.toPythonBooleanOrNone
 import extensions.toPythonStringOrNone
 import extensions.toPythonTupleString
 import matplotlib.Figure
-import matplotlib.toPythonTupleString
+import matplotlib.toPythonTupleStringOrNone
 import python.PythonScriptBuilder
 import java.awt.Color
 
@@ -26,8 +26,8 @@ fun figure(
                         "num=${num.toPythonStringOrNone()}," +
                         "figsize=${figsize.toPythonTupleString()}," +
                         "dpi=${dpi.toPythonStringOrNone()}," +
-                        "facecolor=${facecolor.toPythonTupleString()}," +
-                        "edgecolor=${edgecolor.toPythonTupleString()}," +
+                        "facecolor=${facecolor.toPythonTupleStringOrNone()}," +
+                        "edgecolor=${edgecolor.toPythonTupleStringOrNone()}," +
                         "frameon=${frameon.toPythonBooleanOrNone()}," +
                         "clear=${clear.toPythonBooleanOrNone()}" +
                         ")"
